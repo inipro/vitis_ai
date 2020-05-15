@@ -1,0 +1,257 @@
+$ petalinux-create -t project -n ultra96 --template zynqMP
+$ cd ultra96
+$ petalinux-config --get-hw-description=../..
+
+Subsystem AUTO Hardware Setting -> Serial Settings -> Primary stdin/stdout
+(X) ps7_uart_1
+
+DTG_Settings -> MACHINE_NAME
+    avnet-ultra96-rev1
+
+DTG_Settings -> Kernel Bootargs 
+[ ] generate boot args automatically
+user set kernel bootargs
+      earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait uio_pdrv_genirq.of_id=xlnx,generic-uio cma=512M
+
+u-boot Configuration -> u-boot config target
+	avnet_ultra96_rev1_defconfig
+
+Image Packaging Configuration -> Root filesystem type
+	(X) EXT (SD/eMMC/QSPI/SATA/USB)
+
+Image Packaging Configuration
+    [ ] Copy final images to tftpboot
+
+Yocto Settings -> YOCTO_MACHINE_NAME
+    ultra96-zynqmp
+
+Yocto Settings -> Add pre-mirror url
+    file:///media/hokim/data/downloads_2019.2
+
+Yocto Settings -> Local sstate feeds settings
+    /media/hokim/data/sstate_aarch64_2019.2
+
+Yocto Settings -> User Layers
+    ${PROOT}/../meta-inipro
+
+$ vi project-spec/meta-user/conf/petalinuxbsp.conf
+EXTRA_IMAGEDEPENDS_remove = "qemu-helper-native virtual/boot-bin"
++
++MACHINE_FEATURES_remove = "mipi"
++
++DISTRO_FEATURES_append = " bluez5 dbus"
++
++EXTRA_IMAGE_FEATURES += " package-management"
++
++PACKAGE_FEED_URIS = "http://192.168.2.50:5678"
++
++IMAGE_ROOTFS_EXTRA_SPACE = "102400"
++
++SIGGEN_UNLOCKED_RECIPES += "tzdata dnf-native dropbear dtc-native cmake-native"
++
++PREFERRED_VERSION_wilc-firmware = "15.2"
++
++ULTRA96_VERSION_ultra96-zynqmp = "2"
++
++SSTATE_MIRRORS_append = "  \
++file://.* file:///media/hokim/data/sstate_aarch64_2019.2_2/PATH \n \
++"
++
++PACKAGECONFIG_append_pn-gstreamer1.0-plugins-good = " qt5 opengl"
+
+$ petalinux-build -c device-tree -x configure
+
+$ vi project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+/include/ "system-conf.dtsi"
+/ {
++    /delete-node/ ltc2954;
+};
++
++&sdio_pwrseq {
++    chip_en-gpios = <&gpio 8 1>; // requires a patched pwrseq_simple.c for WILC3000
++};
++
++&gpio {
++    /delete-property/gpio-line-names;
++};
++
++&i2csw_4 {
++    /delete-node/ pmic@5e;
++    irps5401_13: irps5401@13 {
++        compatible = "infineon,irps5401";
++        reg = <0x13>;
++    };
++    irps5401_14: irps5401@14 {
++        compatible = "infineon,irps5401";
++        reg = <0x14>;
++    };
++    ir38060_15: ir38060@15 {
++        compatible = "infineon,ir38060";
++        reg = <0x15>;
++    };
++};
++
++&i2csw_5 {
++    /delete-node/ ina226@40;
++};
++
++&sdhci1 {
++    max-frequency = <50000000>;
++    /delete-property/cap-power-off-card;
++    /delete-node/ wifi@2;
++    wilc_sdio@1 {
++        compatible = "microchip,wilc3000";
++        reg = <0>;
++        bus-width = <0x4>;
++    };
++};
++
++&uart0 {
++    /delete-node/ bluetooth;
++};
++
++&amba {
++    zyxclmm_drm {
++        compatible = "xlnx,zocl";
++        status = "okay";
++        interrupt-parent = <&axi_intc_0>;
++        interrupts = <0  4>, <1  4>, <2  4>, <3  4>,
++                 <4  4>, <5  4>, <6  4>, <7  4>,
++                 <8  4>, <9  4>, <10 4>, <11 4>,
++                 <12 4>, <13 4>, <14 4>, <15 4>,
++                 <16 4>, <17 4>, <18 4>, <19 4>,
++                 <20 4>, <21 4>, <22 4>, <23 4>,
++                 <24 4>, <25 4>, <26 4>, <27 4>,
++                 <28 4>, <29 4>, <30 4>, <31 4>;
++    };
++};
++
++&axi_intc_0 {
++    xlnx,kind-of-intr = <0x0>;
++    interrupt-parent = <&gic>;
++    interrupts = <0 89 4>;
++};
+
+$ vi project-spec/meta-user/recipes-bsp/u-boot/files/platform-top.h
+#ifdef CONFIG_DEBUG_UART
+#undef CONFIG_DEBUG_UART
+#endif
+#endif
++
++/* FIXME Will go away soon */
++#define CONFIG_SYS_I2C_MAX_HOPS         1
++#define CONFIG_SYS_NUM_I2C_BUSES        9
++#define CONFIG_SYS_I2C_BUSES    { \
++                                {0, {I2C_NULL_HOP} }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 0} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 1} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 2} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 3} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 4} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 5} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 6} } }, \
++                                {0, {{I2C_MUX_PCA9548, 0x75, 7} } }, \
++                                }
+
+$ mkdir -p project-spec/meta-user/recipes-core/images
+$ vi project-spec/meta-user/recipes-core/images/petalinux-user-image.bbappend
++EXTRA_USERS_PARAMS = "usermod -P xxxx root;"
++IMAGE_INSTALL_append = " nano \
++                       tzdata \
++                       dtc \
++                       kmod \
++                       e2fsprogs-resize2fs \
++                       i2c-tools \
++						iw \
++						wpa-supplicant \
++						ultra96-power-button \
++						bluez5 \
++                       ${@bb.utils.contains('ULTRA96_VERSION', '2', 'wilc-firmware-wilc3000', '', d)} \
++                       ${@bb.utils.contains('ULTRA96_VERSION', '2', 'wilc', '', d)} \
++                       cmake \
++                       packagegroup-petalinux-self-hosted \
++						packagegroup-petalinux-opencv \
++                       packagegroup-petalinux-openamp \
++                       packagegroup-petalinux-v4lutils \
++                       packagegroup-petalinux-display-debug \
++                       packagegroup-petalinux-x11 \
++                       packagegroup-petalinux-gstreamer \
++                       packagegroup-petalinux-qt \
++                       packagegroup-petalinux-qt-extended \
++                       packagegroup-core-tools-debug \
++						xauth \
++						ffmpeg \
++						file \
++						ldd \
++						xrt \
++						xrt-dev \
++						zocl \
++						opencl-clhpp-dev \
++						opencl-headers-dev \
++						vitis-ai-library \
++						vart-dev \
++						dnndk \
++						dpu \
++						dpcma \
++						"
++inherit populate_sdk_qt5
++TOOLCHAIN_HOST_TASK += "nativesdk-qtbase-dev"
++TOOLCHAIN_TARGET_TASK += "kernel-devsrc"
+
+
+$ petalinux-build
+
+$ petalinux-package --force --boot --fsbl images/linux/zynqmp_fsbl.elf --u-boot images/linux/u-boot.elf --pmufw images/linux/pmufw.elf --fpga images/linux/system.bit
+
+$ petalinux-build -s
+
+
+*** Vivado Flow ***
+
+$ cd petalinux/ultra96
+
+$ petalinux-config --silentconfig --get-hw-description=../../ultra96v1
+
+$ vi project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+-&amba {
+-    zyxclmm_drm {
+-        compatible = "xlnx,zocl";
+-        status = "okay";
+-        interrupt-parent = <&axi_intc_0>;
+-        interrupts = <0  4>, <1  4>, <2  4>, <3  4>,
+-                 <4  4>, <5  4>, <6  4>, <7  4>,
+-                 <8  4>, <9  4>, <10 4>, <11 4>,
+-                 <12 4>, <13 4>, <14 4>, <15 4>,
+-                 <16 4>, <17 4>, <18 4>, <19 4>,
+-                 <20 4>, <21 4>, <22 4>, <23 4>,
+-                 <24 4>, <25 4>, <26 4>, <27 4>,
+-                 <28 4>, <29 4>, <30 4>, <31 4>;
+-    };
+-};
+-
+-&axi_intc_0 {
+-    xlnx,kind-of-intr = <0x0>;
+-    interrupt-parent = <&gic>;
+-    interrupts = <0 89 4>;
+-};
++/ {
++
++	dpu@8f000000 {
++		compatible = "deephi,dpu";
++		reg = <0x0 0x8f000000 0x0 0x700>;
++		interrupts = <0 89 1>;
++		interrupt-parent = <&gic>;
++		core-num = <1>;
++	};
++
++	dpcma {
++		compatible = "deephi,cma";
++	};
++
++};
+
+$ petalinux-build -c virtual/boot-bin
+
+$ petalinux-package --force --boot --fsbl images/linux/zynqmp_fsbl.elf --u-boot images/linux/u-boot.elf --pmufw images/linux/pmufw.elf --fpga images/linux/system.bit
+
+

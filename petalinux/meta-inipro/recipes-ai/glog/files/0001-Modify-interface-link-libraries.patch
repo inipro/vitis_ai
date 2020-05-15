@@ -1,0 +1,25 @@
+From cb08199504aa2f4913239ef4b82b07431d6045e2 Mon Sep 17 00:00:00 2001
+From: Hyunok Kim <hokim@inipro.net>
+Date: Wed, 13 May 2020 14:24:42 +0900
+Subject: [PATCH] Modify interface link libraries
+
+Signed-off-by: Hyunok Kim <hokim@inipro.net>
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 808330e..5f201dc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -499,6 +499,7 @@ endif (gflags_FOUND)
+ 
+ set_target_properties (glog PROPERTIES VERSION ${PROJECT_VERSION})
+ set_target_properties (glog PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
++set_target_properties (glog PROPERTIES INTERFACE_LINK_LIBRARIES "unwind;-lpthread")
+ 
+ if (WIN32)
+   target_compile_definitions (glog PUBLIC GLOG_NO_ABBREVIATED_SEVERITIES)
+-- 
+2.7.4
+
