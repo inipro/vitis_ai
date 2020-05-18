@@ -245,6 +245,7 @@ $ vi project-spec/meta-user/recipes-core/images/petalinux-user-image.bbappend
 +						dnndk \
 +						dpu \
 +						dpcma \
++						dpuclk \
 +						"
 +inherit populate_sdk_qt5
 +TOOLCHAIN_HOST_TASK += "nativesdk-qtbase-dev"
