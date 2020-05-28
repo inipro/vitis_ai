@@ -28,10 +28,10 @@ Yocto Settings -> YOCTO_MACHINE_NAME
     ultra96-zynqmp
 
 Yocto Settings -> Add pre-mirror url
-    file:///media/hokim/data/downloads_2019.2
+    file:///opt/petalinux/data/downloads_2019.2
 
 Yocto Settings -> Local sstate feeds settings
-    /media/hokim/data/sstate_aarch64_2019.2
+    /opt/petalinux/data/sstate_aarch64_2019.2
 
 Yocto Settings -> User Layers
     ${PROOT}/../meta-inipro
@@ -53,7 +53,7 @@ EXTRA_IMAGEDEPENDS_remove = "qemu-helper-native virtual/boot-bin"
 +SIGGEN_UNLOCKED_RECIPES += "tzdata dnf-native dropbear dtc-native cmake-native"
 +
 +SSTATE_MIRRORS_append = "  \
-+file://.* file:///media/hokim/data/sstate_aarch64_2019.2_2/PATH \n \
++file://.* file:///opt/petalinux/data/sstate_aarch64_2019.2_2/PATH \n \
 +"
 +
 +PACKAGECONFIG_append_pn-gstreamer1.0-plugins-good = " qt5 opengl"
@@ -77,7 +77,7 @@ EXTRA_IMAGEDEPENDS_remove = "qemu-helper-native virtual/boot-bin"
 +ULTRA96_VERSION_ultra96-zynqmp = "2"
 +
 +SSTATE_MIRRORS_append = "  \
-+file://.* file:///media/hokim/data/sstate_aarch64_2019.2_2/PATH \n \
++file://.* file:///opt/petalinux/data/sstate_aarch64_2019.2_2/PATH \n \
 +"
 +
 +PACKAGECONFIG_append_pn-gstreamer1.0-plugins-good = " qt5 opengl"
