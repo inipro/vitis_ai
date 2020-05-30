@@ -28,3 +28,4 @@ dpu_prj/*.log
 dpu_prj/*.jou
 dpu_prj/sample*
 data/ILSVRC2012_val/*.JPEG
+**/*.elf
