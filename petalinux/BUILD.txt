@@ -81,6 +81,7 @@ EXTRA_IMAGEDEPENDS_remove = "qemu-helper-native virtual/boot-bin"
 +"
 +
 +PACKAGECONFIG_append_pn-gstreamer1.0-plugins-good = " qt5 opengl"
++LICENSE_FLAGS_WHITELIST_append = " commercial_gstreamer1.0-libav"
 ================================================================================
 
 $ petalinux-build -c device-tree -x configure
@@ -246,6 +247,7 @@ $ vi project-spec/meta-user/recipes-core/images/petalinux-user-image.bbappend
 +						dpu \
 +						dpcma \
 +						dpuclk \
++						gstreamer1.0-libav \
 +						"
 +inherit populate_sdk_qt5
 +TOOLCHAIN_HOST_TASK += "nativesdk-qtbase-dev"
