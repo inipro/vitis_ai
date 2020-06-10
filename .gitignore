@@ -9,6 +9,8 @@ ultra96v1_base
 ultra96v1_base.xsa
 ultra96v2_base
 ultra96v2_base.xsa
+ultra96v1
+ultra96v2
 petalinux/sdk.sh
 petalinux/sdk
 petalinux/ultra96
@@ -33,3 +35,4 @@ test/*_quantized
 test/*_graph.gv
 test/*.hwh
 test/*.dcf
+test/**/*.avi
