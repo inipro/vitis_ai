@@ -36,3 +36,6 @@ test/*_graph.gv
 test/*.hwh
 test/*.dcf
 test/**/*.avi
+test/vitis-ai-library/classification/demo_classification
+test/vitis-ai-library/seg_and_pose_detect/seg_and_pose_detect_drm
+test/vitis-ai-library/seg_and_pose_detect/seg_and_pose_detect_x
