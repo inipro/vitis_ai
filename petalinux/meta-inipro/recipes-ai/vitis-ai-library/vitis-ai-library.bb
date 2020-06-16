@@ -1,7 +1,9 @@
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = ""
 
-SRC_URI = "file://${@bb.utils.contains('AI_VERSION', 'vivado', 'vivado/libvitis_ai_library-1.1.1-Linux.deb', 'libvitis_ai_library-1.1.0-Linux-build46.deb', d)}"
+SRC_URI = "file://${@bb.utils.contains('AI_VERSION', 'vivado', 'vivado/libvitis_ai_library-1.1.1-Linux.deb', 'libvitis_ai_library-1.1.0-Linux-build46.deb', d)} \
+        file://vitis_ai_libraryConfig.cmake \
+"
 
 python do_unpack() {
     src_uri = (d.getVar('SRC_URI') or "").split()
@@ -15,6 +17,7 @@ python do_unpack() {
 }
 
 do_install() {
+    mv ${S}/vitis_ai_libraryConfig.cmake ${S}${datadir}/cmake/vitis_ai_library
 	mv ${S}/usr ${D}
 	rm ${D}/usr/settings.sh
 	chown -R root:root ${D}${bindir}

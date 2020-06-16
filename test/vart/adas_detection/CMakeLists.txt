@@ -12,7 +12,7 @@ add_executable(${PROJECT_NAME}
 			  ../common/common.cpp
 			  src/main.cc)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS} ${vart_INCLUDE_DIRS} ../common)
+target_include_directories(${PROJECT_NAME} PRIVATE ../common)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} vart::runner)
 
