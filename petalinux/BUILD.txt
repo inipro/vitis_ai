@@ -265,7 +265,11 @@ $ petalinux-build -s
 
 $ cd petalinux/ultra96
 
+==================================ultra96v1=====================================
 $ petalinux-config --silentconfig --get-hw-description=../../ultra96v1
+==================================ultra96v2=====================================
+$ petalinux-config --silentconfig --get-hw-description=../../ultra96v2
+================================================================================
 
 $ vi project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
 -&amba {
@@ -294,7 +298,7 @@ $ vi project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
 +	dpu@8f000000 {
 +		compatible = "deephi,dpu";
 +		reg = <0x0 0x8f000000 0x0 0x700>;
-+		interrupts = <0 89 1>;
++		interrupts = <0 89 4>;
 +		interrupt-parent = <&gic>;
 +		core-num = <1>;
 +	};

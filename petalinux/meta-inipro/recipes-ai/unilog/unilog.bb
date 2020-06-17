@@ -1,7 +1,7 @@
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = ""
 
-SRC_URI = "file://${@bb.utils.contains('AI_VERSION', 'vivado', 'vivado/libunilog-1.1.0-Linux.deb', 'libunilog-1.1.0-Linux-build46.deb', d)}"
+SRC_URI = "file://libunilog-1.1.0-Linux-build46.deb"
 
 python do_unpack() {
     src_uri = (d.getVar('SRC_URI') or "").split()

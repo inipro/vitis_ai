@@ -1,7 +1,7 @@
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = ""
 
-SRC_URI = "file://${@bb.utils.contains('AI_VERSION', 'vivado', 'vivado/libvitis_ai_library-1.1.1-Linux.deb', 'libvitis_ai_library-1.1.0-Linux-build46.deb', d)} \
+SRC_URI = "file://libvitis_ai_library-1.1.0-Linux-build46.deb \
         file://vitis_ai_libraryConfig.cmake \
 "
 
