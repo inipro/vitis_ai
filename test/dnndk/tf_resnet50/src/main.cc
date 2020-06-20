@@ -36,6 +36,7 @@
 using namespace std;
 using namespace cv;
 
+//#define KRENEL_CONV "tf_resnet_50_0"
 #define KRENEL_CONV "resnet_v1_50_tf_0"
 
 #define TASK_CONV_INPUT "resnet_v1_50_conv1_Conv2D"

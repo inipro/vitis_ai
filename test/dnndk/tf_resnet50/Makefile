@@ -36,7 +36,7 @@ ARCH	=   $(shell uname -m | sed -e s/arm.*/armv71/ \
 				  -e s/aarch64.*/aarch64/ )
 CFLAGS +=  -mcpu=cortex-a53
 
-#MODEL = $(CUR_DIR)/model/libdpumodelresnet_v1_50_tf.so
+#MODEL = $(CUR_DIR)/model/dpu_tf_resnet50_0.elf
 MODEL = -L$(CUR_DIR)/model -ldpumodelresnet_v1_50_tf
 SRC     =   $(CUR_DIR)/src
 
