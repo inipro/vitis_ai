@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(classification)
+project(demo_classification)
 
 set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "-I")
 
