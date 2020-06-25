@@ -229,10 +229,10 @@ proc create_root_design { parentCell } {
    CONFIG.DWCV_DSP_NUM {36} \
    CONFIG.SUM_BRAM_N {167.0} \
    CONFIG.SUM_DSP_NUM {326} \
-   CONFIG.TIME_DAY {13} \
-   CONFIG.TIME_HOUR {3} \
-   CONFIG.TIME_MONTH {5} \
-   CONFIG.TIME_QUARTER {2} \
+   CONFIG.TIME_DAY {25} \
+   CONFIG.TIME_HOUR {10} \
+   CONFIG.TIME_MONTH {6} \
+   CONFIG.TIME_QUARTER {0} \
    CONFIG.TIME_YEAR {20} \
  ] $dpu
 
@@ -671,7 +671,7 @@ proc create_root_design { parentCell } {
    CONFIG.PSU__CRL_APB__USB3_DUAL_REF_CTRL__SRCSEL {IOPLL} \
    CONFIG.PSU__CRL_APB__USB3__ENABLE {1} \
    CONFIG.PSU__CSUPMU__PERIPHERAL__VALID {1} \
-   CONFIG.PSU__DDRC__ADDR_MIRROR {0} \
+   CONFIG.PSU__DDRC__ADDR_MIRROR {1} \
    CONFIG.PSU__DDRC__AL {0} \
    CONFIG.PSU__DDRC__BANK_ADDR_COUNT {3} \
    CONFIG.PSU__DDRC__BG_ADDR_COUNT {NA} \
@@ -720,7 +720,7 @@ proc create_root_design { parentCell } {
    CONFIG.PSU__DDRC__ENABLE_LP4_SLOWBOOT {0} \
    CONFIG.PSU__DDRC__FGRM {NA} \
    CONFIG.PSU__DDRC__LPDDR3_T_REF_RANGE {NA} \
-   CONFIG.PSU__DDRC__LPDDR4_T_REF_RANGE {NA} \
+   CONFIG.PSU__DDRC__LPDDR4_T_REF_RANGE {Normal (0-85)} \
    CONFIG.PSU__DDRC__LP_ASR {NA} \
    CONFIG.PSU__DDRC__MEMORY_TYPE {LPDDR 4} \
    CONFIG.PSU__DDRC__PARITY_ENABLE {NA} \
@@ -972,11 +972,11 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_LPD [get_bd_intf_pins dpu/S_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_LPD]
 
   # Create port connections
+  connect_bd_net -net BT_ctsn_1 [get_bd_ports BT_ctsn] [get_bd_pins zynq_ultra_ps_e_0/emio_uart0_ctsn]
   connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins dpu/m_axi_dpu_aclk] [get_bd_pins proc_sys_reset_1/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/saxi_lpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/saxihp0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/saxihp1_fpd_aclk]
   connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins clk_wiz_0/clk_out2] [get_bd_pins dpu/dpu_2x_clk] [get_bd_pins proc_sys_reset_2/slowest_sync_clk]
   connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_1/dcm_locked] [get_bd_pins proc_sys_reset_2/dcm_locked]
   connect_bd_net -net dpu_dpu_interrupt [get_bd_pins dpu/dpu_interrupt] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
-  connect_bd_net -net emio_uart0_ctsn_0_1 [get_bd_ports BT_ctsn] [get_bd_pins zynq_ultra_ps_e_0/emio_uart0_ctsn]
   connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins clk_wiz_0/resetn] [get_bd_pins dpu/s_axi_aresetn] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins proc_sys_reset_1/ext_reset_in] [get_bd_pins proc_sys_reset_2/ext_reset_in]
   connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_pins dpu/m_axi_dpu_aresetn] [get_bd_pins proc_sys_reset_1/peripheral_aresetn]
   connect_bd_net -net proc_sys_reset_2_peripheral_aresetn [get_bd_pins dpu/dpu_2x_resetn] [get_bd_pins proc_sys_reset_2/peripheral_aresetn]
@@ -1017,4 +1017,3 @@ import_files -fileset constrs_1 -norecurse ${design_name}.xdc
 
 update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1
-
