@@ -12,7 +12,7 @@ add_executable(${PROJECT_NAME}
 			  ../common/dputils.cpp
 			  src/main.cc)
 
-#target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} dnndk::n2cube ${CMAKE_SOURCE_DIR}/model/dpu_tf_resnet50_0.elf)
+#target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} dnndk::n2cube ${CMAKE_SOURCE_DIR}/model/dpu_resnet_v1_50_tf_0.elf)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} dnndk::n2cube -L${CMAKE_SOURCE_DIR}/model dpumodelresnet_v1_50_tf)
 
 

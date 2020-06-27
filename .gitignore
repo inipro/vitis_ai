@@ -35,5 +35,10 @@ test/**/*.so
 test/*_quantized
 test/*_graph.gv
 test/*.hwh
-test/*.dcf
+**/*.dcf
 test/**/*.avi
+tool-example/float/
+tool-example/example_file/__pycache__/
+tool-example/vai_q_output/
+tool-example/vai_c_output_ultra96v1_base/
+tool-example/vai_c_output_ultra96v2_base/

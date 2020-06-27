@@ -21,7 +21,8 @@ def resnet_v1_50_eval(input_graph_def, input_node, output_node):
 
     # Calculate accuracy
     output = tf.get_default_graph().get_tensor_by_name(output_node+':0')
-    prediction = tf.argmax(tf.reshape(output, [FLAGS.batch_size, FLAGS.class_num]),1)
+    #prediction = tf.argmax(tf.reshape(output, [FLAGS.batch_size, FLAGS.class_num]),1)
+    prediction = tf.argmax(output,1)
     label_prediction = tf.argmax(input_labels,1)
     correct_prediction = tf.equal(prediction,label_prediction)
     accuracy = tf.reduce_mean(tf.cast(correct_prediction,'float'))
@@ -33,11 +34,12 @@ def resnet_v1_50_eval(input_graph_def, input_node, output_node):
         sum_acc = 0
         for iter in progress(range(0,FLAGS.eval_batches)):
             input_data = eval_input(iter, FLAGS.eval_image_dir, FLAGS.eval_image_list, FLAGS.class_num)
-            images = input_data['input']
-            labels = input_data['labels']
-            feed_dict = {input_tensor: images, input_labels: labels}
-            acc = sess.run(accuracy,feed_dict)
-            sum_acc +=  acc
+            if input_data != None:
+                images = input_data['input']
+                labels = input_data['labels']
+                feed_dict = {input_tensor: images, input_labels: labels}
+                acc = sess.run(accuracy,feed_dict)
+                sum_acc +=  acc
     final_accuracy = sum_acc/FLAGS.eval_batches
     print("Accuracy: {}".format(final_accuracy))
     return final_accuracy

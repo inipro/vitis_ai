@@ -62,16 +62,20 @@ def eval_input(iter, eval_image_dir, eval_image_list, class_num):
         image = cv2.imread(eval_image_dir + image_name)
         image = central_crop(image, 224, 224)
         image = mean_image_subtraction(image, MEANS)
-        images.append(image)
-        labels.append(int(label_id))
-    lb = preprocessing.LabelBinarizer()
-    lb.fit(range(0, class_num))
-    labels = lb.transform(labels)
-    return {"input": images, "labels": labels}
+        if image.shape[0] == 224 and image.shape[1] == 224:
+            images.append(image)
+            labels.append(int(label_id))
+    if len(images):
+        lb = preprocessing.LabelBinarizer()
+        lb.fit(range(0, class_num))
+        labels = lb.transform(labels)
+        return {"input": images, "labels": labels}
+    else:
+        return None
 
 
-calib_image_dir = "images/"
-calib_image_list = "images/tf_calib.txt"
+calib_image_dir = "/workspace/data/ILSVRC2012_val/"
+calib_image_list = "tf_calib.txt"
 calib_batch_size = 10
 def calib_input(iter):
     images = []
