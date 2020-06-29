@@ -50,3 +50,4 @@ tutorials/ML-at-Edge-yolov3/model_data/2007_test_pred.txt
 tutorials/ML-at-Edge-yolov3/model_data/2007_test_quantize.txt
 tutorials/MNIST-Classification-TensorFlow/target/images
 tutorials/**/*.elf
+tutorials/CIFAR10-Classification-with-TensorFlow/target/images

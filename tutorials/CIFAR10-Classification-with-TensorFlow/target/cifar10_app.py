@@ -1,5 +1,5 @@
 '''
-Copyright 2020 Xilinx Inc.
+Copyright 2019 Xilinx Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,12 +24,41 @@ import threading
 import time
 import argparse
 
+
+l = threading.Lock()
+
+'''
+Calculate softmax
+data: data to be calculated
+size: data size
+return: softmax result
+'''
+def CPUCalcSoftmax(data,size):
+    sum=0.0
+    result = [0 for i in range(size)]
+    for i in range(size):
+        result[i] = math.exp(data[i])
+        sum +=result[i]
+    for i in range(size):
+        result[i] /=sum
+    return result
+
+'''
+ ArgMax can be used instead of Softmax
+'''
+def CPUCalcArgMax(data):
+    return (np.argmax(data)) 
+
+
+
 '''
 run CNN with batch
 dpu: dpu runner
 img: imagelist to be run
+cnt: threadnum
 '''
-def runDPU(dpu,img,results,threadId,threadImages):
+def runDPU(dpu, img, idx, threadnum, runTotal):
+
 
     """get tensor"""
     inputTensors = dpu.get_input_tensors()
@@ -46,47 +75,46 @@ def runDPU(dpu,img,results,threadId,threadImages):
     else:
         exit("Format error")
     outputSize = outputHeight*outputWidth*outputChannel
-    #softmax = np.empty(outputSize)
+    softmax = np.empty(outputSize)
 
     batchSize = inputTensors[0].dims[0]
+    count = idx*batchSize
 
-    remaining = len(img)
-    batchCount = 0
-
-    while remaining > 0:
-
-        if (remaining> batchSize):
-            runSize = batchSize
+    while count < runTotal:
+        l.acquire()
+        if (runTotal < (count+batchSize)):
+            runSize = runTotal - count
         else:
-            runSize = remaining
-        remaining = remaining - batchSize
- 
+            runSize = batchSize
+        l.release()
         shapeIn = (runSize,) + tuple([inputTensors[0].dims[i] for i in range(inputTensors[0].ndims)][1:])
         
-        """ prepare batch input/output """
+        """prepare batch input/output """
         outputData = []
         inputData = []
         outputData.append(np.empty((runSize,outputHeight,outputWidth,outputChannel), dtype = np.float32, order = 'C'))
         inputData.append(np.empty((shapeIn), dtype = np.float32, order = 'C'))
         
-        """ init input image to input buffer """
+        """init input image to input buffer """
         for j in range(runSize):
             imageRun = inputData[0]
-            imageRun[j,...] = img[(batchCount*batchSize)+j].reshape(inputTensors[0].dims[1],inputTensors[0].dims[2],inputTensors[0].dims[3])
+            imageRun[j,...] = img[count+j].reshape(inputTensors[0].dims[1],inputTensors[0].dims[2],inputTensors[0].dims[3])
 
-        """ run with batch """
+        """run with batch """
         job_id = dpu.execute_async(inputData,outputData)
         dpu.wait(job_id)
 
         for j in range(len(outputData)):
             outputData[j] = outputData[j].reshape(runSize, outputSize)
 
-        """ calculate argmax over batch """
+        """softmax calculate with batch """
         for j in range(runSize):
-            argmax = np.argmax(outputData[0][j])
-            results[(threadId*threadImages)+(batchCount*batchSize)+j] = argmax
+            #argmax = CPUCalcArgMax(outputData[0][j])
+            softmax = CPUCalcSoftmax(outputData[0][j], outputSize)
 
-        batchCount += 1
+        l.acquire()
+        count = count + threadnum*runSize
+        l.release()
 
     return
 
@@ -94,67 +122,36 @@ def runDPU(dpu,img,results,threadId,threadImages):
 
 def runApp(threadnum, json, image_dir):
 
-    """ create runner """
+    """create runner """
     dpu = runner.Runner(json)[0]
 
-    listImage=os.listdir(image_dir)
-    runTotal = len(listImage)
-
+    listimage=os.listdir(image_dir)
+    runTotal = len(listimage)
 
     """ pre-process all images """
     img = []
     for i in range(runTotal):
-        image = cv2.imread(os.path.join(image_dir,listImage[i]), cv2.IMREAD_GRAYSCALE)
-        image = image.reshape(28,28,1)
+        image = cv2.imread(os.path.join(image_dir,listimage[i]))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = image/255.0
         img.append(image)
 
-    """ make a list to hold results - each thread will write into it """
-    results = [None] * len(img)
-
-
     """run with batch """
     threadAll = []
-   
-    threadImages=int(len(img)/threadnum)+1
-
-    # set up the threads
-    for i in range(threadnum):
-        startIdx = i*threadImages
-        if ( (len(listImage)-(i*threadImages)) > threadImages):
-            endIdx=(i+1)*threadImages
-        else:
-            endIdx=len(listImage)
-        t1 = threading.Thread(target=runDPU, args=(dpu,img[startIdx:endIdx],results,i,threadImages))
-        threadAll.append(t1)
-
     time1 = time.time()
+    for i in range(threadnum):
+        t1 = threading.Thread(target=runDPU, args=(dpu, img, i, threadnum, runTotal))
+        threadAll.append(t1)
     for x in threadAll:
         x.start()
     for x in threadAll:
         x.join()
+
     time2 = time.time()
+
     timetotal = time2 - time1
-
     fps = float(runTotal / timetotal)
-    print("Throughput: %.2f FPS" %fps)
-
-    # post-processing - compare results to ground truth labels
-    # ground truth labels are first part of image file name
-    classes = ['zero','one','two','three','four','five','six','seven','eight','nine']
-    correct=0
-    wrong=0
-
-    for i in range(len(listImage)):
-        gt = listImage[i].split('_')
-        if (gt[0]==classes[results[i]]):
-            correct+=1
-        else:
-            wrong+=1
-            print(' ',i,':',listImage[i], classes[results[i]])
-
-    acc = (correct/len(listImage))*100
-    print('Correct:',correct,'Wrong:',wrong,'Accuracy: %.2f' %acc,'%')
+    print("%.2f FPS" %fps)
 
     del dpu
 
