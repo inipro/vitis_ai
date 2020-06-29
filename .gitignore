@@ -38,7 +38,16 @@ test/*.hwh
 **/*.dcf
 test/**/*.avi
 tool-example/float/
-tool-example/example_file/__pycache__/
+**/__pycache__/
 tool-example/vai_q_output/
 tool-example/vai_c_output_ultra96v1_base/
 tool-example/vai_c_output_ultra96v2_base/
+tutorials/ML-at-Edge-yolov3/VOC2007
+tutorials/ML-at-Edge-yolov3/images
+tutorials/ML-at-Edge-yolov3/quantize_results
+tutorials/ML-at-Edge-yolov3/vai_c_output
+tutorials/ML-at-Edge-yolov3/model_data/2007_test_pred.txt
+tutorials/ML-at-Edge-yolov3/model_data/2007_test_quantize.txt
+
+
+

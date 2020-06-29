@@ -34,7 +34,7 @@ def resnet_v1_50_eval(input_graph_def, input_node, output_node):
         sum_acc = 0
         for iter in progress(range(0,FLAGS.eval_batches)):
             input_data = eval_input(iter, FLAGS.eval_image_dir, FLAGS.eval_image_list, FLAGS.class_num)
-            if input_data != None:
+            if input_data is not None:
                 images = input_data['input']
                 labels = input_data['labels']
                 feed_dict = {input_tensor: images, input_labels: labels}
