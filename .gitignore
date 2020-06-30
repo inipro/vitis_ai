@@ -51,3 +51,7 @@ tutorials/ML-at-Edge-yolov3/model_data/2007_test_quantize.txt
 tutorials/MNIST-Classification-TensorFlow/target/images
 tutorials/**/*.elf
 tutorials/CIFAR10-Classification-with-TensorFlow/target/images
+tutorials/Keras-Freeze-with-Vitis-AI/method1
+tutorials/Keras-Freeze-with-Vitis-AI/method2
+tutorials/Keras-Freeze-with-Vitis-AI/method3
+tutorials/Keras-Freeze-with-Vitis-AI/quant_images
