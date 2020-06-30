@@ -36,16 +36,16 @@ echo "CONVERT KERAS TO TF"
 echo "#####################################"
 # method 1
 python keras_2_tf.py --keras_hdf5 ./method1/keras_chkpt.h5 \
-                     --tfckpt=./method1/tf_chkpt.ckpt  
+                     --tf_ckpt=./method1/tf_chkpt.ckpt  
 
 # method 2
 python keras_2_tf.py --keras_hdf5 ./method2/k_complete_model.h5 \
-                     --tfckpt=./method2/tf_chkpt.ckpt  
+                     --tf_ckpt=./method2/tf_chkpt.ckpt  
 
 # method 3
 python keras_2_tf.py --keras_json=./method3/k_model_architecture.json \
                      --keras_hdf5=./method3/k_model_weights.h5 \
-                     --tfckpt=./method3/tf_chkpt.ckpt  
+                     --tf_ckpt=./method3/tf_chkpt.ckpt  
 
 
 echo "#####################################"
