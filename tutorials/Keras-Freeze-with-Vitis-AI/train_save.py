@@ -149,7 +149,7 @@ model.compile(loss='categorical_crossentropy',
 ##############################################
 # set up the checkpoint callback
 chkpt_callback = ModelCheckpoint(os.path.join(METHOD1_DIR,'keras_chkpt.h5'),
-                                 monitor='val_accuracy',
+                                 monitor='val_acc',
                                  verbose=1,
                                  save_best_only=True,
                                  mode='max')

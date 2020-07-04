@@ -46,6 +46,7 @@ tutorials/ML-at-Edge-yolov3/VOC2007
 tutorials/ML-at-Edge-yolov3/images
 tutorials/ML-at-Edge-yolov3/quantize_results
 tutorials/ML-at-Edge-yolov3/vai_c_output
+tutorials/ML-at-Edge-yolov3/model_data/yolov3_voc.pb
 tutorials/ML-at-Edge-yolov3/model_data/2007_test_pred.txt
 tutorials/ML-at-Edge-yolov3/model_data/2007_test_quantize.txt
 tutorials/MNIST-Classification-TensorFlow/target/images
@@ -55,3 +56,14 @@ tutorials/Keras-Freeze-with-Vitis-AI/method1
 tutorials/Keras-Freeze-with-Vitis-AI/method2
 tutorials/Keras-Freeze-with-Vitis-AI/method3
 tutorials/Keras-Freeze-with-Vitis-AI/quant_images
+tutorials/Keras-GoogleNet-ResNet/dataset
+tutorials/Keras-GoogleNet-ResNet/cifar10_dataset.npz
+tutorials/Keras-GoogleNet-ResNet/fmnist_dataset.npz
+tutorials/Keras-GoogleNet-ResNet/keras_model
+tutorials/Keras-GoogleNet-ResNet/doc
+tutorials/Keras-GoogleNet-ResNet/rpt
+tutorials/Keras-GoogleNet-ResNet/tf_chkpts
+tutorials/Keras-GoogleNet-ResNet/freeze
+tutorials/Keras-GoogleNet-ResNet/quantized_results
+tutorials/Keras-GoogleNet-ResNet/compile
+tutorials/Keras-GoogleNet-ResNet/target
