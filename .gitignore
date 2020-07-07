@@ -67,3 +67,10 @@ tutorials/Keras-GoogleNet-ResNet/freeze
 tutorials/Keras-GoogleNet-ResNet/quantized_results
 tutorials/Keras-GoogleNet-ResNet/compile
 tutorials/Keras-GoogleNet-ResNet/target
+tutorials/VAI-KERAS-FCN8-SEMSEG/dataset1.zip
+tutorials/VAI-KERAS-FCN8-SEMSEG/dataset.npz
+tutorials/VAI-KERAS-FCN8-SEMSEG/keras_model
+tutorials/VAI-KERAS-FCN8-SEMSEG/log
+tutorials/VAI-KERAS-FCN8-SEMSEG/rpt
+tutorials/VAI-KERAS-FCN8-SEMSEG/workspace
+tutorials/VAI-KERAS-FCN8-SEMSEG/target

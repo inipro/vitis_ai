@@ -8,8 +8,6 @@ find_package(OpenCV REQUIRED)
 find_package(dnndk COMPONENTS n2cube REQUIRED)
 
 add_executable(${PROJECT_NAME} 
-			  ../common/dputils.h
-			  ../common/dputils.cpp
 			  src/main.cc)
 
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} dnndk::n2cube ${CMAKE_SOURCE_DIR}/model/dpu_resnet_v1_50_tf_0.elf)
