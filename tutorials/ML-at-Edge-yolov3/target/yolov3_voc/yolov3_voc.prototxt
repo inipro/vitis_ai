@@ -36,7 +36,7 @@ model {
     biases: 198
     biases: 373
     biases: 326
-    test_mAP: false
+    test_mAP: true
    }
   is_tf : true
 }
