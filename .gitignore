@@ -11,6 +11,8 @@ ultra96v2_base
 ultra96v2_base.xsa
 ultra96v1
 ultra96v2
+ultra96v1_mipi
+ultra96v2_mipi
 petalinux/sdk.sh
 petalinux/sdk
 petalinux/ultra96
@@ -78,3 +80,4 @@ tutorials/VAI-KERAS-FCN8-SEMSEG/log
 tutorials/VAI-KERAS-FCN8-SEMSEG/rpt
 tutorials/VAI-KERAS-FCN8-SEMSEG/workspace
 tutorials/VAI-KERAS-FCN8-SEMSEG/target
+tutorials/Medical-AI-Acceleration
