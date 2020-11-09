@@ -12,7 +12,9 @@ ultra96v2_base.xsa
 ultra96v1
 ultra96v2
 ultra96v1_mipi
+ultra96v1_mipi.xsa
 ultra96v2_mipi
+ultra96v2_mipi.xsa
 petalinux/sdk.sh
 petalinux/sdk
 petalinux/ultra96
@@ -21,6 +23,11 @@ src/boot/pmufw.elf
 src/boot/bl31.elf
 src/boot/fsbl.elf
 src/boot/u-boot.elf
+src_mipi/a53/xrt/image/image.ub
+src_mipi/boot/pmufw.elf
+src_mipi/boot/bl31.elf
+src_mipi/boot/fsbl.elf
+src_mipi/boot/u-boot.elf
 output
 platforms
 dpu_prj/binary_container_1
@@ -31,12 +38,20 @@ dpu_prj/*.elf
 dpu_prj/*.log
 dpu_prj/*.jou
 dpu_prj/sample*
+dpu_prj_mipi/binary_container_1
+dpu_prj_mipi/packaged_*
+dpu_prj_mipi/tmp_*
+dpu_prj_mipi/*.o
+dpu_prj_mipi/*.elf
+dpu_prj_mipi/*.log
+dpu_prj_mipi/*.jou
+dpu_prj_mipi/sample*
 data/ILSVRC2012_val/*.JPEG
 test/**/*.elf
 test/**/*.so
 test/*_quantized
 test/*_graph.gv
-test/*.hwh
+**/*.hwh
 **/*.dcf
 test/**/*.avi
 tool-example/float/
@@ -48,6 +63,7 @@ tutorials/ML-at-Edge-yolov3/VOC2007
 tutorials/ML-at-Edge-yolov3/images
 tutorials/ML-at-Edge-yolov3/quantize_results
 tutorials/ML-at-Edge-yolov3/vai_c_output
+tutorials/ML-at-Edge-yolov3/vai_c_output_mipi
 tutorials/ML-at-Edge-yolov3/model_data/yolov3_voc.pb
 tutorials/ML-at-Edge-yolov3/model_data/2007_test.txt
 tutorials/ML-at-Edge-yolov3/model_data/2007_test_gt.txt
@@ -81,3 +97,5 @@ tutorials/VAI-KERAS-FCN8-SEMSEG/rpt
 tutorials/VAI-KERAS-FCN8-SEMSEG/workspace
 tutorials/VAI-KERAS-FCN8-SEMSEG/target
 tutorials/Medical-AI-Acceleration
+tutorials/Vitis-AI-Custom-Platform/densebox_320_320_kernel_graph.gv
+tutorials/Vitis-AI-Custom-Platform/quantized

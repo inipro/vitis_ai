@@ -435,6 +435,10 @@ $ vi project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
 +    remote-endpoint =  <&ov5640_to_mipi_csi2>;
 +};
 +
++&v_proc_ss_0 {
++    compatible = "xlnx,v-vpss-csc";
++};
++
 +&csc_ports {
 +    csc_port0: port@0 {
 +        reg = <0>;
