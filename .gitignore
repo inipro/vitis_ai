@@ -98,4 +98,5 @@ tutorials/VAI-KERAS-FCN8-SEMSEG/workspace
 tutorials/VAI-KERAS-FCN8-SEMSEG/target
 tutorials/Medical-AI-Acceleration
 tutorials/Vitis-AI-Custom-Platform/densebox_320_320_kernel_graph.gv
+tutorials/Vitis-AI-Custom-Platform/densebox_640_360_kernel_graph.gv
 tutorials/Vitis-AI-Custom-Platform/quantized
