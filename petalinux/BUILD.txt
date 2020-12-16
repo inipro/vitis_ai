@@ -1,0 +1,424 @@
+$ petalinux-create -t project -n ultra96 --template zynqMP
+$ cd ultra96
+==================================ultra96v1=====================================$ petalinux-config --get-hw-description=../../ultra96v1_mipi
+==================================ultra96v2=====================================
+$ petalinux-config --get-hw-description=../../ultra96v2_mipi
+================================================================================
+
+Subsystem AUTO Hardware Setting -> Serial Settings 
+PMUFW Serial stdin/stdout (psu_uart_1)
+FSBL Serial stdin/stdout (psu_uart_1)
+ATF Serial stdin/stdout (psu_uart_1)
+DTG Serial stdin/stdout (psu_uart_1)
+
+DTG_Settings -> MACHINE_NAME
+    avnet-ultra96-rev1
+
+DTG_Settings -> Kernel Bootargs 
+[ ] generate boot args automatically
+user set kernel bootargs
+      earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait uio_pdrv_genirq.of_id=xlnx,generic-uio cma=512M
+
+Image Packaging Configuration -> Root filesystem type
+	(X) EXT4 (SD/eMMC/QSPI/SATA/USB)
+
+Image Packaging Configuration
+    (tar.gz ext4) Root filesystem formats
+    [ ] Copy final images to tftpboot
+
+Yocto Settings -> YOCTO_MACHINE_NAME
+    ultra96-zynqmp
+
+Yocto Settings -> Add pre-mirror url
+    file:///opt/petalinux/data/downloads_2020.2
+
+Yocto Settings -> Local sstate feeds settings
+    /opt/petalinux/data/sstate_aarch64_2020.2
+
+Yocto Settings -> User Layers
+    ${PROOT}/../meta-inipro
+
+$ vi project-spec/meta-user/conf/petalinuxbsp.conf
+==================================ultra96v1=====================================
+#OE_TERMINAL = "tmux"
++
++MACHINE_FEATURES_remove = "mipi"
++
++EXTRA_IMAGE_FEATURES += " package-management"
++
++PACKAGE_FEED_URIS = "http://192.168.3.50:5678"
++
++IMAGE_ROOTFS_EXTRA_SPACE = "102400"
++
++SIGGEN_UNLOCKED_RECIPES += "tzdata"
++
++PACKAGECONFIG_append_pn-gstreamer1.0-plugins-good = " qt5 opengl"
++
++LICENSE_FLAGS_WHITELIST_append = " commercial_gstreamer1.0-libav"
++
++PREMIRRORS_prepend = " \
++git://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++ftp://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++http://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++https://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++"
++
++SSTATE_MIRRORS_prepend = " \
++file://.* file:///opt/petalinux/data/sstate_aarch64_2020.2_2/PATH \n \
++"
+==================================ultra96v2=====================================
+#OE_TERMINAL = "tmux"
++
++MACHINE_FEATURES_remove = "mipi"
++
++EXTRA_IMAGE_FEATURES += " package-management"
++
++PACKAGE_FEED_URIS = "http://192.168.3.50:5678"
++
++IMAGE_ROOTFS_EXTRA_SPACE = "102400"
++
++SIGGEN_UNLOCKED_RECIPES += "tzdata"
++
++PACKAGECONFIG_append_pn-gstreamer1.0-plugins-good = " qt5"
++
++LICENSE_FLAGS_WHITELIST_append = " commercial_gstreamer1.0-libav"
++
++PREMIRRORS_prepend = " \
++git://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++ftp://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++http://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++https://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++"
++
++SSTATE_MIRRORS_prepend = " \
++file://.* file:///opt/petalinux/data/sstate_aarch64_2020.2_2/PATH \n \
++"
++
++ULTRA96_VERSION_ultra96-zynqmp = "2"
+================================================================================
+
+$ petalinux-build -c device-tree -x configure
+
+$ vi project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+==================================ultra96v1=====================================
+/include/ "system-conf.dtsi"
++/include/ "openamp.dtsi"
+/ {
+};
++
++&amba {
++    zyxclmm_drm {
++        compatible = "xlnx,zocl";
++        status = "okay";
++        interrupt-parent = <&axi_intc_0>;
++        interrupts = <0  4>, <1  4>, <2  4>, <3  4>,
++                 <4  4>, <5  4>, <6  4>, <7  4>,
++                 <8  4>, <9  4>, <10 4>, <11 4>,
++                 <12 4>, <13 4>, <14 4>, <15 4>,
++                 <16 4>, <17 4>, <18 4>, <19 4>,
++                 <20 4>, <21 4>, <22 4>, <23 4>,
++                 <24 4>, <25 4>, <26 4>, <27 4>,
++                 <28 4>, <29 4>, <30 4>, <31 4>;
++    };
++};
++
++&axi_intc_0 {
++    xlnx,kind-of-intr = <0x0>;
++    xlnx,num-intr-inputs = <0x20>;
++    interrupt-parent = <&gic>;
++    interrupts = <0 91 4>;
++};
++
++/ {
++    misc_clk_a: misc_clk_a {
++        compatible = "fixed-clock";
++        #clock-cells = <0>;
++        clock-frequency = <12000000>;
++    };
++    cam_reg_1v8: regulator-1v8 {
++        compatible = "regulator-fixed";
++        regulator-name = "1v8"; 
++        regulator-min-microvolt = <1800000>;
++        regulator-max-microvolt = <1800000>;
++    };  
++    cam_reg_2v8: regulator-2v8 {
++        compatible = "regulator-fixed";
++        regulator-name = "2v8"; 
++        regulator-min-microvolt = <2800000>;
++        regulator-max-microvolt = <2800000>;
++    };  
++    cam_reg_1v5: regulator-1v5 {
++        compatible = "regulator-fixed";
++        regulator-name = "1v5"; 
++        regulator-min-microvolt = <1500000>;
++        regulator-max-microvolt = <1500000>;
++    };
++
++};
++
++&i2csw_1 {
++    ov5640: camera@3c {
++        compatible = "ovti,ov5640";
++        reg = <0x3c>;
++        clocks = <&misc_clk_a>;
++        clock-names = "xclk";
++        rotation = <180>;
++        DOVDD-supply = <&cam_reg_1v8>;
++        AVDD-supply = <&cam_reg_2v8>;
++        DVDD-supply = <&cam_reg_1v5>;
++        powerdown-gpios = <&gpio 36 1>;
++        reset-gpios = <&gpio 39 1>;
++        port {
++            ov5640_to_mipi_csi2: endpoint {
++                remote-endpoint = <&mipi_csi_inmipi_csi2_rx_subsyst_0>;
++                clock-lanes = <0>;
++                data-lanes = <1 2>;
++            };
++        };
++    };
++};
++
++&mipi_csi2_rx_subsyst_0 {
++    compatible = "xlnx,mipi-csi2-rx-subsystem-4.0";
++};
++
++&mipi_csi_port0mipi_csi2_rx_subsyst_0 {
++    /delete-property/ xlnx,cfa-pattern;
++    xlnx,video-format = <0>;
++};
++
++&mipi_csi_port1mipi_csi2_rx_subsyst_0 {
++    /delete-property/ xlnx,cfa-pattern;
++    xlnx,video-format = <0>;
++};
++
++&mipi_csi_inmipi_csi2_rx_subsyst_0 {
++    data-lanes = <1 2>;
++    remote-endpoint =  <&ov5640_to_mipi_csi2>;
++};
++
++&v_proc_ss_0 {
++    compatible = "xlnx,v-vpss-csc";
++};
++
++&csc_port0v_proc_ss_0 {
++    xlnx,video-format = <0>;
++};
++
++&csc_port1v_proc_ss_0 {
++    xlnx,video-format = <2>;
++};
+==================================ultra96v2=====================================
+/include/ "system-conf.dtsi"
++/include/ "openamp.dtsi"
+/ {
++    /delete-node/ ltc2954;
+};
++
++&sdio_pwrseq {
++    reset-gpios = <&gpio 7 1>; // MIO[7] for WILC3000 RESETN, Active low
++    chip_en-gpios = <&gpio 8 1>; 
++};
++
++&gpio {
++    /delete-property/gpio-line-names;
++};
++
++&i2csw_4 {
++    /delete-node/ pmic@5e;
++    irps5401_43: irps5401@43 {
++        compatible = "infineon,irps5401";
++        reg = <0x43>;
++    };
++    irps5401_44: irps5401@44 {
++        compatible = "infineon,irps5401";
++        reg = <0x44>;
++    };
++    ir38060_45: ir38060@45 {
++        compatible = "infineon,ir38060";
++        reg = <0x45>;
++    };
++};
++
++&i2csw_5 {
++    /delete-node/ ina226@40;
++};
++
++&sdhci1 {
++    max-frequency = <50000000>;
++    /delete-property/cap-power-off-card;
++    /delete-node/ wifi@2;
++    wilc_sdio@1 {
++        compatible = "microchip,wilc3000";
++        reg = <0>;
++        bus-width = <0x4>;
++    };
++};
++
++&uart0 {
++    /delete-node/ bluetooth;
++};
++
++&amba {
++    zyxclmm_drm {
++        compatible = "xlnx,zocl";
++        status = "okay";
++        interrupt-parent = <&axi_intc_0>;
++        interrupts = <0  4>, <1  4>, <2  4>, <3  4>,
++                 <4  4>, <5  4>, <6  4>, <7  4>,
++                 <8  4>, <9  4>, <10 4>, <11 4>,
++                 <12 4>, <13 4>, <14 4>, <15 4>,
++                 <16 4>, <17 4>, <18 4>, <19 4>,
++                 <20 4>, <21 4>, <22 4>, <23 4>,
++                 <24 4>, <25 4>, <26 4>, <27 4>,
++                 <28 4>, <29 4>, <30 4>, <31 4>;
++    };
++};
++
++&axi_intc_0 {
++    xlnx,kind-of-intr = <0x0>;
++    xlnx,num-intr-inputs = <0x20>;
++    interrupt-parent = <&gic>;
++    interrupts = <0 91 4>;
++};
++
++/ {
++    misc_clk_a: misc_clk_a {
++        compatible = "fixed-clock";
++        #clock-cells = <0>;
++        clock-frequency = <12000000>;
++    };
++    cam_reg_1v8: regulator-1v8 {
++        compatible = "regulator-fixed";
++        regulator-name = "1v8"; 
++        regulator-min-microvolt = <1800000>;
++        regulator-max-microvolt = <1800000>;
++    };  
++    cam_reg_2v8: regulator-2v8 {
++        compatible = "regulator-fixed";
++        regulator-name = "2v8"; 
++        regulator-min-microvolt = <2800000>;
++        regulator-max-microvolt = <2800000>;
++    };  
++    cam_reg_1v5: regulator-1v5 {
++        compatible = "regulator-fixed";
++        regulator-name = "1v5"; 
++        regulator-min-microvolt = <1500000>;
++        regulator-max-microvolt = <1500000>;
++    };
++
++};
++
++&i2csw_1 {
++    ov5640: camera@3c {
++        compatible = "ovti,ov5640";
++        reg = <0x3c>;
++        clocks = <&misc_clk_a>;
++        clock-names = "xclk";
++        rotation = <180>;
++        DOVDD-supply = <&cam_reg_1v8>;
++        AVDD-supply = <&cam_reg_2v8>;
++        DVDD-supply = <&cam_reg_1v5>;
++        powerdown-gpios = <&gpio 36 1>;
++        reset-gpios = <&gpio 39 1>;
++        port {
++            ov5640_to_mipi_csi2: endpoint {
++                remote-endpoint = <&mipi_csi_inmipi_csi2_rx_subsyst_0>;
++                clock-lanes = <0>;
++                data-lanes = <1 2>;
++            };
++        };
++    };
++};
++
++&mipi_csi2_rx_subsyst_0 {
++    compatible = "xlnx,mipi-csi2-rx-subsystem-4.0";
++};
++
++&mipi_csi_port0mipi_csi2_rx_subsyst_0 {
++    /delete-property/ xlnx,cfa-pattern;
++    xlnx,video-format = <0>;
++};
++
++&mipi_csi_port1mipi_csi2_rx_subsyst_0 {
++    /delete-property/ xlnx,cfa-pattern;
++    xlnx,video-format = <0>;
++};
++
++&mipi_csi_inmipi_csi2_rx_subsyst_0 {
++    data-lanes = <1 2>;
++    remote-endpoint =  <&ov5640_to_mipi_csi2>;
++};
++
++&v_proc_ss_0 {
++    compatible = "xlnx,v-vpss-csc";
++};
++
++&csc_port0v_proc_ss_0 {
++    xlnx,video-format = <0>;
++};
++
++&csc_port1v_proc_ss_0 {
++    xlnx,video-format = <2>;
++};
+================================================================================
+
+$ mkdir -p project-spec/meta-user/recipes-core/images
+$ vi project-spec/meta-user/recipes-core/images/petalinux-image-minimal.bbappend
++inherit populate_sdk_qt5
++TOOLCHAIN_HOST_TASK += "nativesdk-qtbase-dev"
++TOOLCHAIN_TARGET_TASK += "kernel-devsrc"
++
++EXTRA_USERS_PARAMS = "usermod -P 1234 root;"
++IMAGE_INSTALL_append = " vim \
++                         nano \
++                         tzdata \
++                         dtc \
++                         file \
++                         ldd \
++                         kmod \
++                         e2fsprogs-resize2fs \
++                         i2c-tools \
++                         iw \
++                         wpa-supplicant \
++                         bluez5 \
++                         ethtool \
++                         ultra96-power-button \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'ultra96-ap-setup', '', d)} \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'ultra96-misc', '', d)} \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'ultra96-radio-leds', '', d)} \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'ultra96-wpa', '', d)} \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'pmic-prog', '', d)} \
++                         usb-gadget-ethernet \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'wilc3000-fw', '', d)} \
++                         ${@bb.utils.contains('ULTRA96_VERSION', '2', 'wilc', '', d)} \
++                         cmake \
++                         packagegroup-petalinux-self-hosted \
++                         packagegroup-petalinux-opencv \
++                         packagegroup-petalinux-openamp \
++                         packagegroup-petalinux-v4lutils \
++                         packagegroup-petalinux-display-debug \
++                         packagegroup-petalinux-x11 \
++                         packagegroup-petalinux-gstreamer \
++                         packagegroup-petalinux-qt \
++                         packagegroup-petalinux-qt-extended \
++                         packagegroup-core-tools-debug \
++                         packagegroup-petalinux-vitisai \
++                         xauth \
++                         ffmpeg \
++                         gstreamer1.0-libav \
++                         xrt \
++                         xrt-dev \
++                         zocl \
++                         opencl-clhpp \
++                         opencl-headers \
++						"
+
+
+$ petalinux-build
+
+$ petalinux-package --force --boot --fsbl images/linux/zynqmp_fsbl.elf --fpga project-spec/hw-description/*.bit --u-boot images/linux/u-boot.elf --pmufw images/linux/pmufw.elf --atf images/linux/bl31.elf --dtb images/linux/system.dtb
+
+$ petalinux-package --wic --wks ../meta-inipro/wic/my-sdimage.wks
+
+$ petalinux-build -s
