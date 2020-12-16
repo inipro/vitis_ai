@@ -1,1 +1,1 @@
-# vitis_ai
+# vitis_ai 1.2
