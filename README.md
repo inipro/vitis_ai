@@ -1,4 +1,4 @@
-# vitis_ai
+# vitis_ai 1.1
 
 # Download
  - <a href="https://www.xilinx.com/member/forms/download/xef.html?filename=sstate_aarch64_2019.2.tar.gz">sstate_aarch64_2019.2.tar.gz</a>
