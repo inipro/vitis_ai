@@ -56,16 +56,16 @@ $ vi project-spec/meta-user/conf/petalinuxbsp.conf
 +
 +LICENSE_FLAGS_WHITELIST_append = " commercial_gstreamer1.0-libav"
 +
-+PREMIRRORS_prepend = " \
-+git://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+ftp://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+http://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+https://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+"
++#PREMIRRORS_prepend = " \
++#git://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#ftp://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#http://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#https://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#"
 +
-+SSTATE_MIRRORS_prepend = " \
-+file://.* file:///opt/petalinux/data/sstate_aarch64_2020.2_2/PATH \n \
-+"
++#SSTATE_MIRRORS_prepend = " \
++#file://.* file:///opt/petalinux/data/sstate_aarch64_2020.2_2/PATH \n \
++#"
 ==================================ultra96v2=====================================
 #OE_TERMINAL = "tmux"
 +
@@ -83,16 +83,16 @@ $ vi project-spec/meta-user/conf/petalinuxbsp.conf
 +
 +LICENSE_FLAGS_WHITELIST_append = " commercial_gstreamer1.0-libav"
 +
-+PREMIRRORS_prepend = " \
-+git://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+ftp://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+http://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+https://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
-+"
++#PREMIRRORS_prepend = " \
++#git://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#ftp://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#http://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#https://.*/.* file:///opt/petalinux/data/downloads_2020.2_2 \n \
++#"
 +
-+SSTATE_MIRRORS_prepend = " \
-+file://.* file:///opt/petalinux/data/sstate_aarch64_2020.2_2/PATH \n \
-+"
++#SSTATE_MIRRORS_prepend = " \
++#file://.* file:///opt/petalinux/data/sstate_aarch64_2020.2_2/PATH \n \
++#"
 +
 +ULTRA96_VERSION_ultra96-zynqmp = "2"
 ================================================================================
