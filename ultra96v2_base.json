@@ -1,5 +1,0 @@
-{
-    "target"   : "dpuv2", 
-    "dcf"      : "/workspace/ultra96v2_base.dcf",
-    "cpu_arch" : "arm64"
-}

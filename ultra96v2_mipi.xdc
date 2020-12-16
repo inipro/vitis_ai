@@ -1,1 +1,0 @@
-ultra96v2_base.xdc

@@ -1,8 +1,0 @@
-{
-  "target": "DPUv2",
-  "lib": "libvart-dpu-runner.so",
-  "filename": "densebox_640_360.elf",
-  "kernel": [ "densebox_640_360" ],
-  "config_file": "densebox_640_360.prototxt"
-}
-
