@@ -25,11 +25,7 @@ dpu_prj/*.log
 *.hwh
 *.dcf
 data/ILSVRC2012_val/*.JPEG
+*.elf
+**/vaic_output
+**/quantized
 **/build
-vart/resnet50/quantized
-vart/resnet50/vaic_output
-vart/resnet50_mt_py/quantized
-vart/resnet50_mt_py/vaic_output
-vart/adas_detection/quantized
-vart/adas_detection/vaic_output
-

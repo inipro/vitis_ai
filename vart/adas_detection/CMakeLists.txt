@@ -4,7 +4,7 @@ project(adas_detection)
 
 #set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "-I")
 
-find_package(OpenCV REQUIRED)
+find_package(OpenCV COMPONENTS opencv_core opencv_videoio opencv_imgproc opencv_imgcodecs opencv_highgui REQUIRED)
 find_package(vart COMPONENTS runner REQUIRED)
 find_package(unilog REQUIRED)
 find_package(xir REQUIRED)
