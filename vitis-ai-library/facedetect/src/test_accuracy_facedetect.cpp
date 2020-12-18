@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
       resize(canvas, canvas,
              cv::Size(ceil((float)image.rows * network_scale), image.rows));
     }
-    auto namesp = split(name, "FDDB_images/");
+    auto namesp = split(name, "images/");
     auto logic_name = split(namesp[1], ".")[0];
     cout << logic_name << endl;
     // cv::resize(image, img_resize, cv::Size(height, width));
